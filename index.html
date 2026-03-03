@@ -2,19 +2,19 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Age Calculator</title>
+
     <link
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap"
-        rel="stylesheet" />
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Jost:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+
     <style>
-        *,
-        *::before,
-        *::after {
-            box-sizing: border-box;
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box
         }
 
         :root {
@@ -22,470 +22,201 @@
             --card: #ffffff;
             --navy: #1a2236;
             --gold: #b8964e;
-            --gold-lt: #d4af72;
             --gold-bg: #fdf6e8;
-            --text: #1a2236;
             --muted: #7a7d8a;
             --rule: #e4e0d8;
             --green: #2d6a4f;
+            --error: #b94040;
         }
 
         body {
             font-family: 'Jost', sans-serif;
             background: var(--bg);
-            color: var(--text);
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 32px 20px;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg width='4' height='4' viewBox='0 0 4 4' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 3L3 1' stroke='%23c8c4bc' stroke-width='0.4' opacity='0.4'/%3E%3C/svg%3E");
-            pointer-events: none;
+            padding: 60px 20px;
         }
 
         .card {
             width: 100%;
-            max-width: 500px;
+            max-width: 760px;
             background: var(--card);
             border: 1px solid var(--rule);
-            border-top: 3px solid var(--gold);
-            padding: 52px 48px;
-            position: relative;
-            box-shadow: 0 2px 4px rgba(26, 34, 54, 0.04), 0 20px 60px rgba(26, 34, 54, 0.08);
-            animation: rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
-        }
-
-        @keyframes rise {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            border-top: 4px solid var(--gold);
+            padding: 90px;
+            box-shadow: 0 60px 140px rgba(0, 0, 0, 0.12);
         }
 
         .monogram {
             display: flex;
+            justify-content: center;
             align-items: center;
-            gap: 14px;
-            margin-bottom: 36px;
+            gap: 20px;
+            margin-bottom: 60px;
         }
 
         .monogram-line {
             flex: 1;
             height: 1px;
-            background: var(--rule);
+            background: var(--rule)
         }
 
         .monogram-text {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 11px;
-            letter-spacing: 4px;
-            text-transform: uppercase;
+            letter-spacing: 6px;
+            font-size: 13px;
             color: var(--gold);
         }
 
         h1 {
             font-family: 'Cormorant Garamond', serif;
             font-weight: 300;
-            font-size: 42px;
+            font-size: 72px;
             line-height: 1.1;
+            text-align: center;
+            margin-bottom: 20px;
             color: var(--navy);
-            margin-bottom: 8px;
         }
 
         h1 em {
-            font-style: italic;
             color: var(--gold);
+            font-style: italic
         }
 
         .subtitle {
-            font-size: 11px;
-            font-weight: 300;
-            letter-spacing: 2px;
+            text-align: center;
+            letter-spacing: 3px;
+            font-size: 12px;
             color: var(--muted);
+            margin-bottom: 60px;
             text-transform: uppercase;
-            margin-bottom: 40px;
-        }
-
-        /* ── CUSTOM DATE PICKER ── */
-        .field-label {
-            display: block;
-            font-size: 10px;
-            font-weight: 600;
-            letter-spacing: 2.5px;
-            text-transform: uppercase;
-            color: var(--muted);
-            margin-bottom: 14px;
         }
 
         .date-segments {
             display: grid;
             grid-template-columns: 1fr 1.6fr 1fr;
-            gap: 10px;
-            margin-bottom: 8px;
+            gap: 30px;
+            margin-bottom: 25px;
         }
 
-        .seg-wrap {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .seg-lbl {
-            font-size: 9px;
-            font-weight: 600;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--muted);
-            text-align: center;
-        }
-
-        .seg-box {
-            position: relative;
-            background: var(--gold-bg);
-            border: 1.5px solid var(--rule);
-            border-bottom: 2.5px solid var(--rule);
-            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
-            cursor: pointer;
-        }
-
-        .seg-box:hover,
-        .seg-box:focus-within {
-            border-color: var(--gold);
-            border-bottom-color: var(--gold);
-            background: #fff;
-            box-shadow: 0 4px 20px rgba(184, 150, 78, 0.12);
-        }
-
-        .seg-box select {
-            width: 100%;
-            padding: 14px 32px 14px 14px;
-            background: transparent;
-            border: none;
-            outline: none;
+        .date-segments select {
             appearance: none;
-            -webkit-appearance: none;
+            padding: 20px;
             font-family: 'Cormorant Garamond', serif;
             font-size: 22px;
-            font-weight: 600;
-            color: var(--navy);
-            cursor: pointer;
             text-align: center;
+            border: 2px solid var(--rule);
+            background: var(--gold-bg);
+            cursor: pointer;
+            transition: .3s;
         }
 
-        /* month select smaller font */
-        .seg-box.month-seg select {
-            font-size: 15px;
-            font-family: 'Jost', sans-serif;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            padding: 16px 32px 16px 14px;
-        }
-
-        .seg-arrow {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            pointer-events: none;
-            color: var(--gold);
-            opacity: 0.7;
-        }
-
-        /* Animated placeholder state */
-        .seg-box.empty select {
-            color: var(--muted);
-            font-size: 18px;
-            font-style: italic;
-        }
-
-        .seg-box.filled {
-            border-bottom-color: var(--gold);
+        .date-segments select:hover {
+            border-color: var(--gold);
             background: #fff;
+            box-shadow: 0 8px 30px rgba(184, 150, 78, .2);
         }
 
-        /* Pulse animation on first load */
-        @keyframes pulse-border {
-
-            0%,
-            100% {
-                box-shadow: 0 0 0 0 rgba(184, 150, 78, 0);
-            }
-
-            50% {
-                box-shadow: 0 0 0 5px rgba(184, 150, 78, 0.15);
-            }
-        }
-
-        .seg-box.pulse {
-            animation: pulse-border 1.8s ease 0.4s 2;
-        }
-
-        /* Selected value highlight */
-        .seg-box.filled::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 2.5px;
-            background: linear-gradient(90deg, var(--gold), var(--gold-lt));
-        }
-
-        /* Error */
-        .error-msg {
+        #errorMsg {
+            color: var(--error);
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 13px;
             display: none;
-            font-size: 11px;
-            color: #b94040;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
-            margin-top: 6px;
         }
 
-        .error-msg.show {
-            display: block;
-        }
-
-        /* Button */
         .btn {
             width: 100%;
-            margin-top: 28px;
-            padding: 15px 20px;
+            padding: 20px;
             background: var(--navy);
             color: #fff;
-            font-family: 'Jost', sans-serif;
-            font-weight: 500;
-            font-size: 11px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
+            letter-spacing: 4px;
             border: none;
             cursor: pointer;
-            transition: background 0.2s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: var(--gold);
-            transform: scaleX(0);
-            transition: transform 0.35s ease;
+            font-size: 12px;
+            margin-bottom: 50px;
         }
 
         .btn:hover {
-            background: #243050;
+            background: #243050
         }
 
-        .btn:hover::after {
-            transform: scaleX(1);
-        }
-
-        .btn:active {
-            background: #111827;
-        }
-
-        /* ── RESULT ── */
         .result {
-            display: none;
-            margin-top: 44px;
-            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+            display: none
         }
 
         .result.show {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .divider {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 36px;
-        }
-
-        .divider-line {
-            flex: 1;
-            height: 1px;
-            background: var(--rule);
-        }
-
-        .divider-diamond {
-            width: 6px;
-            height: 6px;
-            background: var(--gold);
-            transform: rotate(45deg);
-            flex-shrink: 0;
-        }
-
-        .age-display {
-            display: flex;
-            align-items: baseline;
-            gap: 16px;
-            margin-bottom: 36px;
+            display: block
         }
 
         .age-big {
             font-family: 'Cormorant Garamond', serif;
-            font-weight: 600;
-            font-size: 96px;
-            line-height: 1;
+            font-size: 130px;
+            text-align: center;
             color: var(--navy);
-            letter-spacing: -3px;
-        }
-
-        .age-right {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            padding-bottom: 6px;
-        }
-
-        .age-unit {
-            font-family: 'Cormorant Garamond', serif;
-            font-style: italic;
-            font-size: 22px;
-            color: var(--gold);
-            font-weight: 300;
         }
 
         .age-exact {
-            font-size: 11px;
-            font-weight: 300;
-            letter-spacing: 1px;
+            text-align: center;
             color: var(--muted);
+            margin-bottom: 40px;
         }
 
         .breakdown {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            border: 1px solid var(--rule);
-            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
         }
 
-        .bd-cell {
-            padding: 18px 12px;
-            text-align: center;
-            border-right: 1px solid var(--rule);
+        .breakdown div {
+            text-align: center
         }
 
-        .bd-cell:last-child {
-            border-right: none;
-        }
-
-        .bd-val {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 32px;
-            font-weight: 600;
-            color: var(--navy);
-            display: block;
-            line-height: 1;
-            margin-bottom: 6px;
-        }
-
-        .bd-lbl {
-            font-size: 9px;
-            font-weight: 600;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--muted);
-        }
-
-        .stats-row {
+        .stat-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 25px;
+            margin-bottom: 40px;
         }
 
-        .stat-item {
-            background: #faf9f7;
+        .stat-box {
             border: 1px solid var(--rule);
-            padding: 16px 18px;
-            display: flex;
-            align-items: center;
-            gap: 14px;
+            padding: 25px;
+            text-align: center;
         }
 
-        .stat-icon {
-            width: 32px;
-            height: 32px;
-            background: var(--navy);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .stat-body .stat-val {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 20px;
-            font-weight: 600;
-            color: var(--navy);
-            line-height: 1.1;
-        }
-
-        .stat-body .stat-lbl {
-            font-size: 9px;
-            font-weight: 500;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: var(--muted);
-            margin-top: 2px;
-        }
-
-        .bday-banner {
+        .birthday {
+            border-left: 4px solid var(--green);
             background: #f0f7f4;
-            border: 1px solid #b7d9ca;
-            border-left: 3px solid var(--green);
-            padding: 16px 20px;
-            display: flex;
-            align-items: flex-start;
-            gap: 14px;
-        }
-
-        .bday-text {
-            font-size: 12px;
+            padding: 20px;
             color: var(--green);
-            line-height: 1.6;
         }
 
-        .bday-text strong {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 15px;
-            font-weight: 600;
-            display: block;
-            margin-bottom: 1px;
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 12px;
+            letter-spacing: 2px;
+            color: var(--muted);
+        }
+
+        .footer a {
+            text-decoration: none;
+            color: var(--navy);
+            font-weight: 500;
+        }
+
+        .footer a:hover {
+            color: var(--gold)
         }
     </style>
 </head>
 
 <body>
+
     <div class="card">
 
         <div class="monogram">
@@ -497,296 +228,180 @@
         <h1>Calculate<br>Your <em>Age</em></h1>
         <p class="subtitle">Select your date of birth below</p>
 
-        <label class="field-label">Date of Birth</label>
-
         <div class="date-segments">
-            <!-- DAY -->
-            <div class="seg-wrap">
-                <span class="seg-lbl">Day</span>
-                <div class="seg-box pulse" id="boxDay">
-                    <select id="selDay" onchange="onSegChange('day')">
-                        <option value="">DD</option>
-                    </select>
-                    <svg class="seg-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="6 9 12 15 18 9" />
-                    </svg>
-                </div>
-            </div>
+            <select id="day"></select>
 
-            <!-- MONTH -->
-            <div class="seg-wrap">
-                <span class="seg-lbl">Month</span>
-                <div class="seg-box month-seg pulse" id="boxMonth" style="animation-delay:0.6s">
-                    <select id="selMonth" onchange="onSegChange('month')">
-                        <option value="">Month</option>
-                        <option value="1">January</option>
-                        <option value="2">February</option>
-                        <option value="3">March</option>
-                        <option value="4">April</option>
-                        <option value="5">May</option>
-                        <option value="6">June</option>
-                        <option value="7">July</option>
-                        <option value="8">August</option>
-                        <option value="9">September</option>
-                        <option value="10">October</option>
-                        <option value="11">November</option>
-                        <option value="12">December</option>
-                    </select>
-                    <svg class="seg-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="6 9 12 15 18 9" />
-                    </svg>
-                </div>
-            </div>
+            <select id="month">
+                <option value="">Month</option>
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+            </select>
 
-            <!-- YEAR -->
-            <div class="seg-wrap">
-                <span class="seg-lbl">Year</span>
-                <div class="seg-box pulse" id="boxYear" style="animation-delay:0.9s">
-                    <select id="selYear" onchange="onSegChange('year')">
-                        <option value="">YYYY</option>
-                    </select>
-                    <svg class="seg-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="6 9 12 15 18 9" />
-                    </svg>
-                </div>
-            </div>
+            <select id="year"></select>
         </div>
 
-        <div class="error-msg" id="error">Please select a complete and valid date of birth.</div>
+        <div id="errorMsg"></div>
 
-        <button class="btn" onclick="calculate()">Calculate Age</button>
+        <button class="btn" onclick="calculate()">CALCULATE AGE</button>
 
         <div class="result" id="result">
-            <div class="divider">
-                <div class="divider-line"></div>
-                <div class="divider-diamond"></div>
-                <div class="divider-line"></div>
-            </div>
-
-            <div class="age-display">
-                <span class="age-big" id="ageYears">--</span>
-                <div class="age-right">
-                    <span class="age-unit">years old</span>
-                    <span class="age-exact" id="ageExact"></span>
-                </div>
-            </div>
+            <div class="age-big" id="years">--</div>
+            <div class="age-exact" id="exact"></div>
 
             <div class="breakdown">
-                <div class="bd-cell">
-                    <span class="bd-val" id="bdYears">-</span>
-                    <span class="bd-lbl">Years</span>
-                </div>
-                <div class="bd-cell">
-                    <span class="bd-val" id="bdMonths">-</span>
-                    <span class="bd-lbl">Months</span>
-                </div>
-                <div class="bd-cell">
-                    <span class="bd-val" id="bdDays">-</span>
-                    <span class="bd-lbl">Days</span>
-                </div>
+                <div><strong id="bdYears"></strong><br>Years</div>
+                <div><strong id="bdMonths"></strong><br>Months</div>
+                <div><strong id="bdDays"></strong><br>Days</div>
             </div>
 
-            <div class="stats-row">
-                <div class="stat-item">
-                    <div class="stat-icon">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#d4af72" stroke-width="1.8"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="4" width="18" height="18" rx="2" />
-                            <line x1="3" y1="10" x2="21" y2="10" />
-                            <line x1="8" y1="2" x2="8" y2="6" />
-                            <line x1="16" y1="2" x2="16" y2="6" />
-                        </svg>
-                    </div>
-                    <div class="stat-body">
-                        <div class="stat-val" id="totalDays">-</div>
-                        <div class="stat-lbl">Days Lived</div>
-                    </div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-icon">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#d4af72" stroke-width="1.8"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="9" />
-                            <polyline points="12 7 12 12 15 15" />
-                        </svg>
-                    </div>
-                    <div class="stat-body">
-                        <div class="stat-val" id="totalHours">-</div>
-                        <div class="stat-lbl">Hours Lived</div>
-                    </div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-icon">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#d4af72" stroke-width="1.8"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <polygon points="12 2 2 7 12 12 22 7 12 2" />
-                            <polyline points="2 17 12 22 22 17" />
-                            <polyline points="2 12 12 17 22 12" />
-                        </svg>
-                    </div>
-                    <div class="stat-body">
-                        <div class="stat-val" id="totalWeeks">-</div>
-                        <div class="stat-lbl">Weeks Lived</div>
-                    </div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-icon">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#d4af72" stroke-width="1.8"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="9" />
-                            <path d="M12 8v4l3 3" />
-                        </svg>
-                    </div>
-                    <div class="stat-body">
-                        <div class="stat-val" id="zodiac">-</div>
-                        <div class="stat-lbl">Zodiac Sign</div>
-                    </div>
-                </div>
+            <div class="stat-grid">
+                <div class="stat-box"><strong id="totalDays"></strong><br>Total Days</div>
+                <div class="stat-box"><strong id="totalWeeks"></strong><br>Total Weeks</div>
+                <div class="stat-box"><strong id="totalHours"></strong><br>Total Hours</div>
+                <div class="stat-box"><strong id="zodiac"></strong><br>Zodiac Sign</div>
             </div>
 
-            <div class="bday-banner">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2d6a4f" stroke-width="1.8"
-                    stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px">
-                    <path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0z" />
-                    <circle cx="12" cy="10" r="3" />
-                </svg>
-                <div class="bday-text" id="bdayText"></div>
-            </div>
+            <div class="birthday" id="birthdayText"></div>
         </div>
+
+    </div>
+
+    <div class="footer">
+        Created by Chirag Parashar<br><br>
+        <a href="https://www.linkedin.com/in/chiragparashar9665" target="_blank">LinkedIn</a>
     </div>
 
     <script>
-        // ── Populate Day options (1-31)
-        const selDay = document.getElementById('selDay');
-        for (let d = 1; d <= 31; d++) {
-            const o = document.createElement('option');
-            o.value = d;
-            o.textContent = String(d).padStart(2, '0');
-            selDay.appendChild(o);
+        const daySel = document.getElementById("day");
+        const yearSel = document.getElementById("year");
+        const monthSel = document.getElementById("month");
+        const errorBox = document.getElementById("errorMsg");
+        const resultBox = document.getElementById("result");
+
+        function isLeapYear(year) {
+            return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
         }
 
-        // ── Populate Year options (current year down to 1900)
-        const selYear = document.getElementById('selYear');
-        const curYear = new Date().getFullYear();
-        for (let y = curYear; y >= 1900; y--) {
-            const o = document.createElement('option');
-            o.value = y;
-            o.textContent = y;
-            selYear.appendChild(o);
-        }
+        function updateDays() {
+            const m = parseInt(monthSel.value);
+            const y = parseInt(yearSel.value);
+            if (!m || !y) return;
 
-        // ── Handle segment change — add "filled" class
-        function onSegChange(seg) {
-            const map = { day: 'boxDay', month: 'boxMonth', year: 'boxYear' };
-            const selMap = { day: selDay, month: document.getElementById('selMonth'), year: selYear };
-            const box = document.getElementById(map[seg]);
-            if (selMap[seg].value) {
-                box.classList.add('filled');
-                box.classList.remove('empty');
-            } else {
-                box.classList.remove('filled');
-                box.classList.add('empty');
+            let days;
+            if (m === 2) days = isLeapYear(y) ? 29 : 28;
+            else if ([4, 6, 9, 11].includes(m)) days = 30;
+            else days = 31;
+
+            const current = daySel.value;
+            daySel.innerHTML = "";
+            for (let i = 1; i <= days; i++) {
+                let opt = document.createElement("option");
+                opt.value = i;
+                opt.textContent = i;
+                daySel.appendChild(opt);
             }
+            if (current <= days) daySel.value = current;
         }
 
-        // Mark all as empty on start
-        ['boxDay', 'boxMonth', 'boxYear'].forEach(id => document.getElementById(id).classList.add('empty'));
+        for (let y = new Date().getFullYear(); y >= 1900; y--) {
+            let opt = document.createElement("option");
+            opt.value = y;
+            opt.textContent = y;
+            yearSel.appendChild(opt);
+        }
 
-        // ── Helpers
-        function fmt(n) { return n.toLocaleString('en-IN'); }
+        monthSel.addEventListener("change", updateDays);
+        yearSel.addEventListener("change", updateDays);
 
-        function getZodiac(m, d) {
-            const z = [
-                [1, 20, 'Aquarius'], [2, 19, 'Pisces'], [3, 21, 'Aries'], [4, 20, 'Taurus'],
-                [5, 21, 'Gemini'], [6, 21, 'Cancer'], [7, 23, 'Leo'], [8, 23, 'Virgo'],
-                [9, 23, 'Libra'], [10, 23, 'Scorpio'], [11, 22, 'Sagittarius'], [12, 22, 'Capricorn']
-            ];
+        const today = new Date();
+        yearSel.value = today.getFullYear();
+        monthSel.value = today.getMonth() + 1;
+        updateDays();
+        daySel.value = today.getDate();
+
+        function zodiacSign(m, d) {
+            const z = [[1, 20, "Aquarius"], [2, 19, "Pisces"], [3, 21, "Aries"], [4, 20, "Taurus"],
+            [5, 21, "Gemini"], [6, 21, "Cancer"], [7, 23, "Leo"], [8, 23, "Virgo"],
+            [9, 23, "Libra"], [10, 23, "Scorpio"], [11, 22, "Sagittarius"], [12, 22, "Capricorn"]];
             for (let i = z.length - 1; i >= 0; i--) {
-                if (m > z[i][0] || (m === z[i][0] && d >= z[i][1])) return z[i][2];
+                if (m > z[i][0] || (m == z[i][0] && d >= z[i][1])) return z[i][2];
             }
-            return 'Capricorn';
+            return "Capricorn";
         }
 
-        // ── Calculate
         function calculate() {
-            const d = parseInt(selDay.value);
-            const m = parseInt(document.getElementById('selMonth').value);
-            const y = parseInt(selYear.value);
-            const errEl = document.getElementById('error');
-            const resEl = document.getElementById('result');
+            errorBox.style.display = "none";
+            errorBox.textContent = "";
+            resultBox.classList.remove("show");
+
+            const d = parseInt(daySel.value);
+            const m = parseInt(monthSel.value);
+            const y = parseInt(yearSel.value);
 
             if (!d || !m || !y) {
-                errEl.textContent = 'Please select day, month, and year.';
-                errEl.classList.add('show');
-                resEl.classList.remove('show');
+                errorBox.textContent = "Please select complete date.";
+                errorBox.style.display = "block";
                 return;
             }
 
             const dob = new Date(y, m - 1, d);
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
+            const now = new Date();
+            now.setHours(0, 0, 0, 0);
 
-            // Validate actual date (e.g. Feb 30)
-            if (dob.getMonth() !== m - 1 || dob.getDate() !== d) {
-                errEl.textContent = 'Invalid date — please check your selection.';
-                errEl.classList.add('show');
-                resEl.classList.remove('show');
+            if (dob > now) {
+                errorBox.textContent = "Date of birth cannot be in the future.";
+                errorBox.style.display = "block";
                 return;
             }
 
-            if (dob > today) {
-                errEl.textContent = 'Date of birth cannot be in the future.';
-                errEl.classList.add('show');
-                resEl.classList.remove('show');
-                return;
-            }
+            let years = now.getFullYear() - dob.getFullYear();
+            let months = now.getMonth() - dob.getMonth();
+            let days = now.getDate() - dob.getDate();
 
-            errEl.classList.remove('show');
-
-            let years = today.getFullYear() - dob.getFullYear();
-            let months = today.getMonth() - dob.getMonth();
-            let days = today.getDate() - dob.getDate();
-
-            if (days < 0) {
-                months--;
-                days += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
-            }
+            if (days < 0) { months--; days += new Date(now.getFullYear(), now.getMonth(), 0).getDate(); }
             if (months < 0) { years--; months += 12; }
 
-            const msDay = 86400000;
-            const totalDays = Math.floor((today - dob) / msDay);
+            const totalDays = Math.floor((now - dob) / (1000 * 60 * 60 * 24));
             const totalWeeks = Math.floor(totalDays / 7);
             const totalHours = totalDays * 24;
-            const zodiac = getZodiac(m, d);
 
-            let next = new Date(today.getFullYear(), dob.getMonth(), dob.getDate());
-            if (next <= today) next.setFullYear(today.getFullYear() + 1);
-            const daysLeft = Math.ceil((next - today) / msDay);
-            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-            const nextStr = `${d} ${monthNames[m - 1]} ${next.getFullYear()}`;
+            /* FIXED BIRTHDAY LOGIC */
+            if (now.getDate() === dob.getDate() && now.getMonth() === dob.getMonth()) {
+                document.getElementById("birthdayText").innerHTML =
+                    "<strong>Happy Birthday!</strong> 🎉 Enjoy your special day!";
+            }
+            else {
+                let next = new Date(now.getFullYear(), dob.getMonth(), dob.getDate());
+                if (next < now) next.setFullYear(now.getFullYear() + 1);
+                const daysLeft = Math.ceil((next - now) / (1000 * 60 * 60 * 24));
+                document.getElementById("birthdayText").innerHTML =
+                    `${daysLeft} days until your next birthday`;
+            }
 
-            document.getElementById('ageYears').textContent = years;
-            document.getElementById('ageExact').textContent = `${years} yrs  ${months} mo  ${days} days`;
-            document.getElementById('bdYears').textContent = years;
-            document.getElementById('bdMonths').textContent = months;
-            document.getElementById('bdDays').textContent = days;
-            document.getElementById('totalDays').textContent = fmt(totalDays);
-            document.getElementById('totalHours').textContent = fmt(totalHours);
-            document.getElementById('totalWeeks').textContent = fmt(totalWeeks);
-            document.getElementById('zodiac').textContent = zodiac;
+            document.getElementById("years").textContent = years;
+            document.getElementById("exact").textContent = `${years} yrs ${months} months ${days} days`;
+            document.getElementById("bdYears").textContent = years;
+            document.getElementById("bdMonths").textContent = months;
+            document.getElementById("bdDays").textContent = days;
+            document.getElementById("totalDays").textContent = totalDays;
+            document.getElementById("totalWeeks").textContent = totalWeeks;
+            document.getElementById("totalHours").textContent = totalHours;
+            document.getElementById("zodiac").textContent = zodiacSign(m, d);
 
-            document.getElementById('bdayText').innerHTML = daysLeft === 0
-                ? `<strong>Happy Birthday!</strong>Wishing you a wonderful day.`
-                : `<strong>${daysLeft} days until your next birthday</strong>${nextStr}`;
-
-            resEl.classList.remove('show');
-            void resEl.offsetWidth;
-            resEl.classList.add('show');
+            resultBox.classList.add("show");
         }
     </script>
+
 </body>
 
 </html>
